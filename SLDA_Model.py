@@ -35,6 +35,8 @@ class StreamingLDA(nn.Module):
         self.cK = torch.zeros(num_classes).to(self.device)
         self.Sigma = torch.ones((input_shape, input_shape)).to(self.device)
         self.num_updates = 0
+        self.Lambda = torch.zeros_like(self.Sigma).to(self.device)
+        self.prev_num_updates = -1
 
     def fit(self, x, y):
         """
@@ -81,10 +83,19 @@ class StreamingLDA(nn.Module):
             scores = torch.empty((num_samples, self.num_classes))
             mb = min(self.test_batch_size, num_samples)
 
+            # compute/load Lambda matrix
+            if self.prev_num_updates != self.num_updates:
+                # there have been updates to the model, compute Lambda
+                print('\nFirst predict since model update...computing Lambda matrix...')
+                Lambda = torch.pinverse(
+                    (1 - self.shrinkage_param) * self.Sigma + self.shrinkage_param * torch.eye(self.input_shape).to(
+                        self.device))
+                self.Lambda = Lambda
+                self.prev_num_updates = self.num_updates
+            else:
+                Lambda = self.Lambda
+
             # parameters for predictions
-            Lambda = torch.pinverse(
-                (1 - self.shrinkage_param) * self.Sigma + self.shrinkage_param * torch.eye(self.input_shape).to(
-                    self.device))
             M = self.muK.transpose(1, 0)
             W = torch.matmul(Lambda, M)
             c = 0.5 * torch.sum(M * W, dim=0)

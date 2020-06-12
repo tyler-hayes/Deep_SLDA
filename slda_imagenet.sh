@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 # project directory
+### CHANGE ME ###
 PROJ_ROOT=/home/Deep_SLDA
 
 export PYTHONPATH=${PROJ_ROOT}
@@ -8,6 +9,7 @@ source activate base
 cd ${PROJ_ROOT}
 
 # directory for ImageNet train and val folders
+### CHANGE ME ###
 IMAGENET_IMAGES_DIR=/home/data/ImageNet2012
 
 # plastic covariance experiment

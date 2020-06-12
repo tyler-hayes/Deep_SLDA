@@ -130,7 +130,7 @@ def run_experiment(dataset, images_dir, save_dir, classifier, feature_extraction
             iters = int(len(train_loader.dataset) / batch_size)
             # fit model
             for batch_ix, (batch_x, batch_y) in enumerate(train_loader):
-                print('\rFitting %d/%d.' % (batch_ix, iters), end='')
+                # print('\rFitting %d/%d.' % (batch_ix, iters), end='')
                 # get feature in real-time
                 if feature_extraction_wrapper is not None:
                     # extract feature from pre-trained model and mean pool
