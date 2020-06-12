@@ -17,7 +17,7 @@ Alternatively, setup appropriate parameters and run directly in python:
 - `python experiment.py`
 
 ## Implementation Notes
-When run, the script will save out network probabilities (torch files) and accuracies (json files) after every 100 classes in a directory called `./streaming_experiments/*expt_name*`. 
+When run, the script will save out network probabilities (torch files), accuracies (json files), and the SLDA means and covariance weights (torch files) after every 100 classes in a directory called `./streaming_experiments/*expt_name*`. 
 
 We have included all necessary files to replicate our ImageNet-1K experiments. Note that the checkpoint file provided in `image_files` has only been trained on the base 100 classes. However, for other datasets you may want a checkpoint trained on the entire ImageNet-1K dataset, e.g., our CORe50 experiments. Simply change line 196 of `experiment.py` to `feature_extraction_model = get_feature_extraction_model(None, imagenet_pretrained=True).eval()` to use ImageNet-1K pre-trained weights from PyTorch.
 

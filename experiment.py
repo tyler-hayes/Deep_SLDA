@@ -80,7 +80,7 @@ def update_accuracies(images_dir, curr_max_class, num_classes, classifier, accur
 
     # save accuracies and predictions out
     utils.save_accuracies(accuracies, min_class_trained=0, max_class_trained=curr_max_class, save_path=save_dir)
-    utils.save_predictions(seen_probas, 0, curr_max_class - 1, save_dir)
+    utils.save_predictions(seen_probas, 0, curr_max_class, save_dir)
 
 
 def run_experiment(dataset, images_dir, save_dir, classifier, feature_extraction_wrapper, feature_size, batch_size,
@@ -90,6 +90,7 @@ def run_experiment(dataset, images_dir, save_dir, classifier, feature_extraction
     accuracies = {'seen_classes_top1': [], 'seen_classes_top5': []}
 
     first_time = True  # true for base init stage
+    slda_save_name = "slda_model_weights_min_trained_0_max_trained_%d"
 
     # loop over all data and compute accuracy after every "batch"
     for curr_class_ix in range(0, num_classes, class_increment):
@@ -146,12 +147,14 @@ def run_experiment(dataset, images_dir, save_dir, classifier, feature_extraction
         # output accuracies to console and save out to json file
         update_accuracies(images_dir, max_class, num_classes, classifier, accuracies, save_dir, batch_size, shuffle,
                           dataset)
+        classifier.save_model(save_dir, slda_save_name % max_class)
 
     # print final accuracies and time
     test_loader = get_data_loader(images_dir, False, 0, num_classes, batch_size=batch_size, shuffle=shuffle,
                                   dataset=dataset)
     probas, y_test = predict(classifier, test_loader, num_classes)
     top1, top5 = utils.accuracy(probas, y_test, topk=(1, 5))
+    classifier.save_model(save_dir, "slda_model_weights_final")
     end_time = time.time()
     print('\nFinal: top1=%0.2f%% -- top5=%0.2f%%' % (top1, top5))
     print('\nTotal Time (seconds): %0.2f' % (end_time - start_time))

@@ -152,3 +152,17 @@ class StreamingLDA(nn.Module):
 
         # save model out
         torch.save(d, os.path.join(save_path, save_name + '.pth'))
+
+    def load_model(self, save_path, save_name):
+        """
+        Load the model parameters into StreamingLDA object.
+        :param save_path: the path where the model is saved
+        :param save_name: the name of the saved file
+        :return:
+        """
+        # load parameters
+        d = torch.load(os.path.join(save_path, save_name + '.pth'))
+        self.muK = d['muK'].to(self.device)
+        self.cK = d['cK'].to(self.device)
+        self.Sigma = d['Sigma'].to(self.device)
+        self.num_updates = d['num_updates']
