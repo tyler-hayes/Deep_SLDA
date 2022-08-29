@@ -4,7 +4,6 @@ This is a PyTorch implementation of the Deep Streaming Linear Discriminant Analy
 
 Deep SLDA combines a feature extractor with LDA to perform streaming image classification and can be thought of as a way to train the output layer of a neural network. Deep SLDA only requires the storage of a single shared covariance matrix beyond its feature extraction CNN, making its memory requirements very low, e.g., 0.001 GB for our experiments with ResNet-18. Further, once initialized, Deep SLDA is able to train incrementally on the ImageNet dataset in roughly 30 minutes on a Titan X GPU. This is remarkable as methods like iCaRL require 3.011 GB of storage beyond the CNN and require 62 hours to train on the same hardware.
 
-An additional Deep SLDA implementation directly using the CORe50 dataset and scenarios defined in the original CORe50 paper is located [here](https://github.com/tyler-hayes/SLDA-Tutorial)
 
 ## Dependences 
 - Tested with Python 3.6 and PyTorch 1.1.0, or Python 3.7 and PyTorch 1.3.1, NumPy, NVIDIA GPU
